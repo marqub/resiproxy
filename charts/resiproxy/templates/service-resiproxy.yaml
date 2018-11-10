@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: toxy-resiproxy
+  labels:
+    app: {{ template "resiproxy.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.resiproxy.type }}
+  ports:
+    - port: {{ .Values.service.resiproxy.externalPort }}
+      targetPort: {{ .Values.service.resiproxy.internalPort }}
+      protocol: TCP
+      name: http-{{ .Values.service.resiproxy.name }}
+  selector:
+    app: {{ template "resiproxy.name" . }}
+    release: {{ .Release.Name }}
