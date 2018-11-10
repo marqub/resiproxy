@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "resiproxy.fullname" . }}
+  labels:
+    app: {{ template "resiproxy.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: {{ template "resiproxy.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: resiproxy
+      imagePullSecrets:
+      - name: {{ .Values.image.resiproxy.secret }}
+      containers:
+        - name: toxiproxy
+          image: "{{ .Values.image.toxiproxy.repository }}:{{ .Values.image.toxiproxy.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.service.toxiproxy.internalPort }}
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.resiproxy.repository }}:{{ .Values.image.resiproxy.tag }}"
+          imagePullPolicy: {{ .Values.image.resiproxy.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.resiproxy.internalPort }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
