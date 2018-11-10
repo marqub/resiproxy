@@ -2,13 +2,13 @@
 kind: ServiceAccount
 apiVersion: v1
 metadata:
-  name: proxytoxi
+  name: resiproxy
   namespace: {{ .Release.Namespace | default "default"}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: proxytoxi-read
+  name: resiproxy-read
 rules:
 - apiGroups: [""]
   resources:
@@ -19,13 +19,13 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: proxytoxi-read
+  name: resiproxy-read
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: v-read
+  name: resiproxy-read
 subjects:
 - kind: ServiceAccount
-  name: proxytoxi
+  name: resiproxy
   namespace: {{ .Release.Namespace | default "default"}}
 ---

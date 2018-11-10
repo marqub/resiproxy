@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: toxy-toxiproxy
   labels:
-    app: {{ template "toxiProxy.name" . }}
+    app: {{ template "resiproxy.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
