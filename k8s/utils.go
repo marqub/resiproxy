@@ -19,11 +19,13 @@ func CreateK8sMapping(listen string) error {
 	if err != nil {
 		return err
 	}
+
 	// creates the in-cluster config
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		return err
 	}
+
 	// creates the clientset
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
@@ -32,7 +34,7 @@ func CreateK8sMapping(listen string) error {
 
 	// get the toxyproxy service
 	// TODO: need to pass these values through env variables
-	service, err := clientset.CoreV1().Services("toxy").Get("toxy-toxiproxy", metav1.GetOptions{})
+	service, err := clientset.CoreV1().Services("toxy").Get("resiproxy-toxiproxy", metav1.GetOptions{})
 	if err != nil {
 		return err
 	}

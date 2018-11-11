@@ -11,16 +11,14 @@ import (
 
 	"github.com/marqub/resiproxy/k8s"
 	"github.com/marqub/resiproxy/log"
-
-	"github.com/sirupsen/logrus"
 )
 
 type Proxy struct {
-	Name     string   `json:"name"`
-	Listen   string   `json:"name"`
-	Upstream string   `json:"name"`
-	Enabled  string   `json:"name"`
-	Toxics   []string `json:"name"`
+	Name     string `json:"name"`
+	Listen   string `json:"listenn"`
+	Upstream string `json:"upstream"`
+	Enabled  bool   `json:"enabled"`
+	Toxics   string `json:"-"`
 }
 
 func CreateProxy(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +43,7 @@ func CreateProxy(w http.ResponseWriter, r *http.Request) {
 	log.Logger().Info("Create proxy :", string(body))
 	err = k8s.CreateK8sMapping(proxy.Listen)
 	if err != nil {
-		logrus.Error("K8s mappings can not be created")
+		log.Logger().Info("K8s mappings can not be created: ", err)
 		return
 	}
 	ProxyRequest(w, r)
@@ -53,7 +51,7 @@ func CreateProxy(w http.ResponseWriter, r *http.Request) {
 
 func ProxyRequest(w http.ResponseWriter, r *http.Request) {
 	log.Logger().Info("Proxy request")
-	serveReverseProxy(getEnv("key", "http://www.google.com"), w, r)
+	serveReverseProxy(getEnv("key", "http://resiproxy-toxiproxy.toxy:8474"), w, r)
 }
 
 // Get env var or default
