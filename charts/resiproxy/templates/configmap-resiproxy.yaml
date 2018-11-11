@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-{{ .Values.service.resiproxy.name }}
+data:
+  toxiproxy.name: {{ .Values.service.toxiproxy.name }}
+  toxiproxy.namespace: {{ .Release.Namespace }}
+  toxiproxy.scheme: http
+  toxiproxy.port: "{{ .Values.service.toxiproxy.externalPort }}"
