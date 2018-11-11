@@ -29,6 +29,9 @@ spec:
               protocol: TCP
               containerPort: {{ .Values.service.toxiproxy.internalPort }}
         - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: configmap-{{ .Values.service.resiproxy.name }}
           image: "{{ .Values.image.resiproxy.repository }}:{{ .Values.image.resiproxy.tag }}"
           imagePullPolicy: {{ .Values.image.resiproxy.pullPolicy }}
           ports:
