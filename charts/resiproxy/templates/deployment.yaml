@@ -25,12 +25,16 @@ spec:
           image: "{{ .Values.image.toxiproxy.repository }}:{{ .Values.image.toxiproxy.tag }}"
           imagePullPolicy: {{ .Values.image.toxiproxy.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.toxiproxy.internalPort }}
+            - name: http-{{ .Values.service.toxiproxy.name }}
+              protocol: TCP
+              containerPort: {{ .Values.service.toxiproxy.internalPort }}
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.resiproxy.repository }}:{{ .Values.image.resiproxy.tag }}"
           imagePullPolicy: {{ .Values.image.resiproxy.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.resiproxy.internalPort }}
+            - name: http-{{ .Values.service.resiproxy.name }}
+              protocol: TCP
+              containerPort: {{ .Values.service.resiproxy.internalPort }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
