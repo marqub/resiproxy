@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -15,7 +16,7 @@ import (
 
 type Proxy struct {
 	Name     string `json:"name"`
-	Listen   string `json:"listenn"`
+	Listen   string `json:"listen"`
 	Upstream string `json:"upstream"`
 	Enabled  bool   `json:"enabled"`
 	Toxics   string `json:"-"`
@@ -28,9 +29,7 @@ func CreateProxy(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	if err := r.Body.Close(); err != nil {
-		panic(err)
-	}
+	r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 
 	if err := json.Unmarshal(body, &proxy); err != nil {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
