@@ -11,6 +11,6 @@ import (
 func main() {
 	router := rest.NewRouter()
 	log.Logger().Info("Server started")
-	log.Logger().Fatal(http.ListenAndServe(":8080", router))
 	log.Logger().Info("Configuration: ", k8s.Config)
+	log.Logger().Fatal(http.ListenAndServe(":8080", router))
 }
