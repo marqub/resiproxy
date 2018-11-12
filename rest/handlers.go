@@ -3,12 +3,12 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"os"
 
 	"github.com/marqub/resiproxy/k8s"
 	"github.com/marqub/resiproxy/log"
@@ -22,6 +22,7 @@ type Proxy struct {
 	Toxics   string `json:"-"`
 }
 
+// CreateProxy by delegating the call to the ToxiProxy service and try to open the k8s ports before
 func CreateProxy(w http.ResponseWriter, r *http.Request) {
 
 	var proxy Proxy
@@ -48,17 +49,11 @@ func CreateProxy(w http.ResponseWriter, r *http.Request) {
 	ProxyRequest(w, r)
 }
 
+// ProxyRequest to toxiproxy service
 func ProxyRequest(w http.ResponseWriter, r *http.Request) {
-	log.Logger().Info("Proxy request")
-	serveReverseProxy(getEnv("key", "http://resiproxy-toxiproxy.toxy:8474"), w, r)
-}
-
-// Get env var or default
-func getEnv(key, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return fallback
+	toxiproxyURL := url.URL{Scheme: k8s.Config.Scheme, Host: fmt.Sprintf("%s.%s:%d", k8s.Config.Name, k8s.Config.Namespace, k8s.Config.Port)}
+	log.Logger().Info("Proxy request to: ", toxiproxyURL.String())
+	serveReverseProxy(toxiproxyURL.String(), w, r)
 }
 
 // Serve a reverse proxy for a given url

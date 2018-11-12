@@ -5,7 +5,7 @@ import (
 
 	"net"
 
-	"github.com/sirupsen/logrus"
+	"github.com/marqub/resiproxy/log"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -14,6 +14,7 @@ import (
 	"k8s.io/client-go/rest"
 )
 
+// CreateK8sMapping opens a new port at the ToxiProxy k8s service level
 func CreateK8sMapping(listen string) error {
 	_, listeningPort, err := net.SplitHostPort(listen)
 	if err != nil {
@@ -33,19 +34,18 @@ func CreateK8sMapping(listen string) error {
 	}
 
 	// get the toxyproxy service
-	// TODO: need to pass these values through env variables
-	service, err := clientset.CoreV1().Services("toxy").Get("resiproxy-toxiproxy", metav1.GetOptions{})
+	service, err := clientset.CoreV1().Services(Config.Namespace).Get(Config.Name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
 
 	// add a new port mapping to the service
-	logrus.Infof("%+v", service.Spec.Ports)
+	log.Logger().Debug("%+v", service.Spec.Ports)
 	newPort, _ := strconv.Atoi(listeningPort)
 	if !doesPortExist(service.Spec.Ports, listeningPort) {
 		service.Spec.Ports = append(service.Spec.Ports, v1.ServicePort{Name: strconv.Itoa(newPort), Port: int32(newPort), TargetPort: intstr.FromInt(newPort)})
-		logrus.Infof("%+v", service.Spec.Ports)
-		service, err = clientset.CoreV1().Services("toxy").Update(service)
+		log.Logger().Debug("%+v", service.Spec.Ports)
+		service, err = clientset.CoreV1().Services(Config.Namespace).Update(service)
 		if err != nil {
 			return err
 		}
