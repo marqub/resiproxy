@@ -40,11 +40,11 @@ func CreateK8sMapping(listen string) error {
 	}
 
 	// add a new port mapping to the service
-	log.Logger().Debug("%+v", service.Spec.Ports)
+	log.Logger().Debugf("%+v", service.Spec.Ports)
 	newPort, _ := strconv.Atoi(listeningPort)
 	if !doesPortExist(service.Spec.Ports, listeningPort) {
 		service.Spec.Ports = append(service.Spec.Ports, v1.ServicePort{Name: strconv.Itoa(newPort), Port: int32(newPort), TargetPort: intstr.FromInt(newPort)})
-		log.Logger().Debug("%+v", service.Spec.Ports)
+		log.Logger().Debugf("%+v", service.Spec.Ports)
 		service, err = clientset.CoreV1().Services(Config.Namespace).Update(service)
 		if err != nil {
 			return err
