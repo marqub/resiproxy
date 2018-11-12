@@ -6,7 +6,7 @@ WORKDIR /resiproxy/
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
 
 FROM alpine:edge
-COPY --from=build /go/src/github.com/marqub/resiproxy/resiproxy /resiproxy
+COPY --from=build /resiproxy/resiproxy /resiproxy
 
 EXPOSE 8080
 ENTRYPOINT ["/resiproxy"]   
