@@ -45,9 +45,9 @@ docker-run: docker-build
 docker-push: docker-build
 		docker push marqub/resiproxy:dev
 helm: docker-push
-		helm upgrade --install  respiproxy --namespace respiproxy --recreate-pods --wait --tiller-namespace=respiproxy charts/resproxy
+		helm upgrade --install  resiproxy --namespace resiproxy --recreate-pods --wait --tiller-namespace=resiproxy charts/resproxy
 delete:
-		helm delete --purge --tiller-namespace=neobot neobot | true
+		helm delete --purge --tiller-namespace=resiproxy resiproxy | true
 ## Documentation
 docs:
 		./gendocs.sh
