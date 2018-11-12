@@ -1,8 +1,7 @@
-FROM golang:1.11 as build
-RUN mkdir -p /go/src/github.com/marqub/resiproxy/
-WORKDIR /go/src/github.com/marqub/resiproxy/
+FROM golang:1.11.1 as build
 
-COPY . .
+COPY . /resiproxy
+WORKDIR /resiproxy/
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
 
