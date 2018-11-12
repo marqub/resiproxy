@@ -5,11 +5,10 @@ replicaCount: 1
 image:
   toxiproxy:
     repository: shopify/toxiproxy
-    tag: latest
+    tag: 2.1.3
     pullPolicy: Always
   resiproxy:
     repository: marqub/resiproxy
-    #secret: hub.gitlab-sj.thalesesec.com
     tag: latest
     pullPolicy: Always  
 service:

@@ -3,13 +3,14 @@ package main
 import (
 	"net/http"
 
+	"github.com/marqub/resiproxy/k8s"
 	"github.com/marqub/resiproxy/log"
 	"github.com/marqub/resiproxy/rest"
 )
 
 func main() {
-	log.Logger().Info("Server started")
 	router := rest.NewRouter()
+	log.Logger().Info("Server started")
 	log.Logger().Fatal(http.ListenAndServe(":8080", router))
-	//":"+os.Getenv("PORT")
+	log.Logger().Info("Configuration: ", k8s.Config)
 }

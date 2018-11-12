@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: configmap-{{ .Values.service.resiproxy.name }}
 data:
-  toxiproxy.name: {{ .Values.service.toxiproxy.name }}
-  toxiproxy.namespace: {{ .Release.Namespace }}
-  toxiproxy.scheme: http
-  toxiproxy.port: "{{ .Values.service.toxiproxy.externalPort }}"
+  TOXIPROXY_NAME: {{ .Release.Name }}-{{ .Values.service.toxiproxy.name }}
+  TOXIPROXY_NAMESPACE: {{ .Release.Namespace }}
+  TOXIPROXY_SCHEME: http
+  TOXIPROXY_PORT: "{{ .Values.service.toxiproxy.externalPort }}"
