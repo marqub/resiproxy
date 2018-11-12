@@ -41,13 +41,13 @@ install:  deps
 
 ## Dev testing
 docker-build:
-		docker build -t hub.tesfabric.com/tools/neobot:dev .
+		docker build -t marqub/resiproxy:dev .
 docker-run: docker-build
-		docker run -ti --rm hub.tesfabric.com/tools/neobot:dev
+		docker run -ti --rm marqub/resiproxy:dev
 docker-push: docker-build
-		docker push hub.tesfabric.com/tools/neobot:dev
+		docker push marqub/resiproxy:dev
 helm: docker-push
-		helm upgrade --install  neobot --namespace neobot --recreate-pods --wait --set image.tag=dev --tiller-namespace=neobot chart
+		helm upgrade --install  respiproxy --namespace respiproxy --recreate-pods --wait --tiller-namespace=respiproxy charts/resproxy
 delete:
 		helm delete --purge --tiller-namespace=neobot neobot | true
 ## Documentation
