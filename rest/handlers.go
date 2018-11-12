@@ -28,25 +28,33 @@ func CreateProxy(w http.ResponseWriter, r *http.Request) {
 	var proxy Proxy
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
 	if err != nil {
-		panic(err)
+		log.Logger().Info("Request can't be read: ", err)
+		returnError(http.StatusInternalServerError, "Invalid request", w)
+		return
 	}
 	r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 
 	if err := json.Unmarshal(body, &proxy); err != nil {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(422) // unprocessable entity
-		if err := json.NewEncoder(w).Encode(jsonErr{Code: http.StatusPreconditionFailed, Text: "Invalid Proxy"}); err != nil {
-			panic(err)
-		}
+		// unprocessable entity
+		returnError(http.StatusPreconditionFailed, "Invalid Proxy", w)
 		return
 	}
 	log.Logger().Info("Create proxy :", string(body))
 	err = k8s.CreateK8sMapping(proxy.Listen)
 	if err != nil {
+		returnError(http.StatusInternalServerError, "Internal error", w)
 		log.Logger().Info("K8s mappings can not be created: ", err)
 		return
 	}
 	ProxyRequest(w, r)
+}
+
+func returnError(code int, message string, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(422)
+	if err := json.NewEncoder(w).Encode(jsonErr{Code: code, Text: message}); err != nil {
+		log.Logger().Error(err)
+	}
 }
 
 // ProxyRequest to toxiproxy service
