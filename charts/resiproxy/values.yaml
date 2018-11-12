@@ -26,7 +26,7 @@ ingress:
   enabled: true
   # Used to create an Ingress record.
   hosts:
-    - resiproxy.lucy.thalesesec.com
+    - resiproxy.marqub.com
   annotations:
     kubernetes.io/ingress.class: istio
     # kubernetes.io/tls-acme: "true"
