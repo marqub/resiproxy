@@ -11,9 +11,8 @@ GOCLEAN:=$(GOCMD) clean
 GOTEST:=$(GOCMD) test
 GOGET:=$(GOCMD) get
 GOVET:=$(GOCMD) vet
-PRESO:=$(GOPATH)/bin/neobot
 GOLINT:=golint
-BINARY_UNIX:=neobot
+BINARY_UNIX:=resiproxy
 BINARY_NAME:=$(BINARY_UNIX)$(EXE)
 LDFLAGS:=
 ifeq (, $(shell which rice))
@@ -31,7 +30,6 @@ deps:
 
 build: $(BINARY_NAME)
 $(BINARY_NAME): deps
-		echo "$(BINARY_NAME)"
 		CGO_ENABLED=0 $(GOBUILD) -o $(BINARY_NAME) -ldflags  "-s -w"
 
 

@@ -1,4 +1,4 @@
-FROM golang:1.11.1 as build
+FROM golang:1.11.2 as build
 
 COPY . /resiproxy
 WORKDIR /resiproxy/
