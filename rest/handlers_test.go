@@ -46,7 +46,7 @@ func TestCreateProxy(t *testing.T) {
 				},
 				w: recorder,
 			},
-			want: []byte(`{"code":500,"text":"unable to load in-cluster configuration, KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT must be defined"}`),
+			want: []byte("{\"code\":500,\"text\":\"unable to load in-cluster configuration, KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT must be defined\"}\n"),
 		},
 	}
 	for _, tt := range tests {
@@ -55,7 +55,7 @@ func TestCreateProxy(t *testing.T) {
 			req, _ := http.NewRequest("POST", "/proxies", bytes.NewBuffer(body))
 			CreateProxy(tt.args.w, req)
 			if out := tt.args.w.Body.Bytes(); !reflect.DeepEqual(out, tt.want) {
-				t.Errorf("CreateProxy() = %v, want %v", string(out), tt.want)
+				t.Errorf("CreateProxy() = %v, want %v", string(out), string(tt.want))
 			}
 		})
 	}
@@ -81,7 +81,7 @@ func Test_returnError(t *testing.T) {
 				message: "Nope!",
 				w:       recorder,
 			},
-			want: []byte(`{"code":500,"text":"Nope!"}`),
+			want: []byte("{\"code\":500,\"text\":\"Nope!\"}\n"),
 		},
 	}
 	for _, tt := range tests {
@@ -89,7 +89,7 @@ func Test_returnError(t *testing.T) {
 			returnError(tt.args.code, tt.args.message, tt.args.w)
 
 			if out := tt.args.w.Body.Bytes(); !reflect.DeepEqual(out, tt.want) {
-				t.Errorf("returnError() = %v, want %v", string(out), tt.want)
+				t.Errorf("returnError() = %v, want %v", string(out), string(tt.want))
 			}
 		})
 	}
@@ -133,7 +133,7 @@ func Test_serveReverseProxy(t *testing.T) {
 		name string
 		args args
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
