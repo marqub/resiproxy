@@ -1,9 +1,10 @@
 package rest
 
 import (
-	"github.com/gorilla/mux"
 	"reflect"
 	"testing"
+
+	"github.com/gorilla/mux"
 )
 
 func TestNewRouter(t *testing.T) {
@@ -31,7 +32,6 @@ func TestNewRouter(t *testing.T) {
 			}
 			if !reflect.DeepEqual(tt.wantRoutes, foundRoutes) {
 				t.Errorf("Logger() = %v, want %v", foundRoutes, tt.wantRoutes)
-
 			}
 		})
 	}

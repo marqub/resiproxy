@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -39,6 +40,7 @@ func CreateProxy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	r.Body = ioutil.NopCloser(bytes.NewBuffer(data))
 	// Unmarshall the data
 	if err := json.Unmarshal(data, &proxy); err != nil {
 		// unprocessable entity
