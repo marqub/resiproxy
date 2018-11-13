@@ -1,10 +1,8 @@
 package rest
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
@@ -26,24 +24,35 @@ type Proxy struct {
 func CreateProxy(w http.ResponseWriter, r *http.Request) {
 
 	var proxy Proxy
-	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+
+	// Check that this is a POST first
+	if r.Method != "POST" {
+		log.Logger().Error("invalid method ")
+		returnError(http.StatusMethodNotAllowed, "Invalid Method for this URL", w)
+	}
+
+	// Read the in POST body
+	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Logger().Info("Request can't be read: ", err)
+		log.Logger().Errorf("request can't be read: %v ", err)
 		returnError(http.StatusInternalServerError, "Invalid request", w)
 		return
 	}
-	r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 
-	if err := json.Unmarshal(body, &proxy); err != nil {
+	// Unmarshall the data
+	if err := json.Unmarshal(data, &proxy); err != nil {
 		// unprocessable entity
+		log.Logger().Errorf("unprocessable entity: %v", err)
 		returnError(http.StatusPreconditionFailed, "Invalid Proxy", w)
 		return
 	}
-	log.Logger().Info("Create proxy :", string(body))
+
+	// Create the proxy
+	log.Logger().Infof("Create proxy : %v ", string(data))
 	err = k8s.CreateK8sMapping(proxy.Listen)
 	if err != nil {
-		returnError(http.StatusInternalServerError, "Internal error", w)
-		log.Logger().Info("K8s mappings can not be created: ", err)
+		log.Logger().Errorf("k8s mappings can not be created: %v", err)
+		returnError(http.StatusInternalServerError, err.Error(), w)
 		return
 	}
 	ProxyRequest(w, r)

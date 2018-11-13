@@ -45,7 +45,7 @@ docker-run: docker-build
 docker-push: docker-build
 		docker push marqub/resiproxy:dev
 helm: docker-push
-		helm upgrade --install  resiproxy --namespace resiproxy --recreate-pods --wait --tiller-namespace=resiproxy charts/resproxy
+		helm upgrade --install  resiproxy --namespace resiproxy --recreate-pods --wait --tiller-namespace=resiproxy chart
 delete:
 		helm delete --purge --tiller-namespace=resiproxy resiproxy | true
 ## Documentation
@@ -56,7 +56,7 @@ docs:
 coverage: deps
 		$(GOTEST) $(TAGS) -coverprofile .testCoverage.txt ./...  && go tool cover -func=.testCoverage.txt
 lint:
-		$(GOLINT) -set_exit_status .r/...
+		$(GOLINT) -set_exit_status ./...
 vet:
 		GOOS=linux GOARCH=amd64 CGO_ENABLED=0 $(GOVET) $(TAGS) ./...
 test:  deps
