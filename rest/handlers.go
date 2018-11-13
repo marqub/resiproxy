@@ -61,14 +61,11 @@ func returnError(code int, message string, w http.ResponseWriter) {
 func ProxyRequest(w http.ResponseWriter, r *http.Request) {
 	toxiproxyURL := url.URL{Scheme: k8s.Config.Scheme, Host: fmt.Sprintf("%s.%s:%d", k8s.Config.Name, k8s.Config.Namespace, k8s.Config.Port)}
 	log.Logger().Info("Proxy request to: ", toxiproxyURL.String())
-	serveReverseProxy(toxiproxyURL.String(), w, r)
+	serveReverseProxy(&toxiproxyURL, w, r)
 }
 
 // Serve a reverse proxy for a given url
-func serveReverseProxy(target string, res http.ResponseWriter, req *http.Request) {
-	// parse the url
-	url, _ := url.Parse(target)
-
+func serveReverseProxy(url *url.URL, res http.ResponseWriter, req *http.Request) {
 	// create the reverse proxy
 	proxy := httputil.NewSingleHostReverseProxy(url)
 
