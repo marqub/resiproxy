@@ -16,3 +16,4 @@
 Gopkg.lock
 .idea
 resiproxy
+go.sum
