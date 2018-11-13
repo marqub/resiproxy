@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/marqub/broadcast/tree/master.svg?style=svg)](https://circleci.com/gh/marqub/broadcast/tree/master)
 # ResiProxy
 ### ResiProxy is a [ToxiProxy](https://github.com/Shopify/toxiproxy) k8s companion:
  - intercepts REST proxy creation requests and open all the necessary ports
