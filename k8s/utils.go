@@ -1,21 +1,20 @@
 package k8s
 
 import (
-	"strconv"
-
-	"net"
-
 	"github.com/marqub/resiproxy/log"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
-
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	"net"
+	"strconv"
 )
 
 // CreateK8sMapping opens a new port at the ToxiProxy k8s service level
 func CreateK8sMapping(listen string) error {
+
+	// get the port to listen on
 	_, listeningPort, err := net.SplitHostPort(listen)
 	if err != nil {
 		return err
