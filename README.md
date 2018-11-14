@@ -47,8 +47,8 @@ resiproxy-read  0s
 
 ==> v1/Service
 NAME                 TYPE       CLUSTER-IP      EXTERNAL-IP  PORT(S)   AGE
-resiproxy-resiproxy  ClusterIP  100.69.253.165  <none>       8080/TCP  0s
-resiproxy-toxiproxy  ClusterIP  100.64.177.78   <none>       8474/TCP  0s
+resiproxy-resiproxy  ClusterIP  xxx.xxx.xxx.xxx  <none>       8080/TCP  0s
+resiproxy-toxiproxy  ClusterIP  xxx.xxx.xxx.xxx   <none>      8474/TCP  0s
 
 ==> v1beta1/Deployment
 NAME                 DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE
@@ -92,13 +92,13 @@ Labels:            app=resiproxy
 Annotations:       <none>
 Selector:          app=resiproxy,release=resiproxy
 Type:              ClusterIP
-IP:                100.64.177.78
+IP:                xxx.xxx.xxx.xxx
 Port:              http-toxiproxy  8474/TCP
 TargetPort:        8474/TCP
-Endpoints:         10.44.0.8:8474
+Endpoints:         xxx.xxx.xxx.xxx:8474
 Port:              6379  6379/TCP
 TargetPort:        6379/TCP
-Endpoints:         10.44.0.8:6379
+Endpoints:         xxx.xxx.xxx.xxx:6379
 Session Affinity:  None
 Events:            <none>
 ```
