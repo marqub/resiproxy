@@ -75,10 +75,10 @@ curl -X POST \
   -H 'Cache-Control: no-cache' \
   -H 'Content-Type: application/json' \
   -d '{
-    name: "proxy_redis",
-    listen: "[::]:6379",
-    upstream: "redis-redis.core:6379",
-    enabled: true
+    "name": "proxy_redis",
+    "listen": "[::]:6379",
+    "upstream": "redis-redis.lucy:6379",
+    "enabled": true
 }'
 ```
 This sample request open the port 6379 at the `toxiproxy` service level to redirect the incoming traffic to the port `6379` of the `redis service` in the namespace `core`: `redis-redis.core:6379`
@@ -97,6 +97,9 @@ IP:                100.64.177.78
 Port:              http-toxiproxy  8474/TCP
 TargetPort:        8474/TCP
 Endpoints:         10.44.0.8:8474
+Port:              6379  6379/TCP
+TargetPort:        6379/TCP
+Endpoints:         10.44.0.8:6379
 Session Affinity:  None
 Events:            <none>
 ```
