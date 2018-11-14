@@ -24,7 +24,7 @@ All endpoints are JSON.
 - POST /reset - Enable all proxies and remove all active toxics
 - GET /version - Returns the server version number
 
-The helm chart deployment create several K8s resources
+The helm chart creates several K8s resources
 ```
 $ helm install chart/ --namespace toxy --name resiproxy
 NAME:   resiproxy
@@ -61,7 +61,6 @@ resiproxy-resiproxy  resiproxy.marqub.com  80, 443  0s
 ==> v1/Pod(related)
 NAME                                 READY  STATUS       RESTARTS  AGE
 resiproxy-resiproxy-cfc4ccbff-6v9w5  0/3    Init:0/1     0         0s
-resiproxy-resiproxy-cfc4ccbff-qfb2t  0/3    Terminating  0         5m
 
 ==> v1/ConfigMap
 NAME                 DATA  AGE
