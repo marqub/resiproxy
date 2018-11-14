@@ -76,11 +76,11 @@ curl -X POST \
   -d '{
     "name": "proxy_redis",
     "listen": "[::]:6379",
-    "upstream": "redis-redis.lucy:6379",
+    "upstream": "redis-redis.core:6379",
     "enabled": true
 }'
 ```
-This sample request open the port 6379 at the `toxiproxy` service level to redirect the incoming traffic to the port `6379` of the `redis service` in the namespace `core`: `redis-redis.core:6379`
+This sample request opens the port 6379 at the `toxiproxy` service level to redirect the incoming traffic to the port `6379` of the `redis service` in the namespace `core`: `redis-redis.core:6379`
 ```
 $ kubectl describe service resiproxy-toxiproxy -n toxy 
 Name:              resiproxy-toxiproxy
