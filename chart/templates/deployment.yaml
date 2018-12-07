@@ -15,6 +15,7 @@ spec:
         app: {{ template "resiproxy.name" . }}
         release: {{ .Release.Name }}
     spec:
+      serviceAccountName: resiproxy
       containers:
         - name: toxiproxy
           image: "{{ .Values.image.toxiproxy.repository }}:{{ .Values.image.toxiproxy.tag }}"
@@ -25,7 +26,7 @@ spec:
               containerPort: {{ .Values.service.toxiproxy.internalPort }}
           readinessProbe:
             httpGet:
-              path: /
+              path: /version
               port: {{ .Values.service.toxiproxy.internalPort }}
             initialDelaySeconds: 5
             periodSeconds: 5
@@ -41,7 +42,7 @@ spec:
               containerPort: {{ .Values.service.resiproxy.internalPort }}
           readinessProbe:
             httpGet:
-              path: /
+              path: /status
               port: {{ .Values.service.resiproxy.internalPort }}
             initialDelaySeconds: 5
             periodSeconds: 5

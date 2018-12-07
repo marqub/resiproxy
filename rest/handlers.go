@@ -20,6 +20,10 @@ type Proxy struct {
 	Enabled  bool   `json:"enabled"`
 	Toxics   string `json:"-"`
 }
+type jsonStatus struct {
+	Status string `json:"status"`
+	Name   string `json:"name"`
+}
 
 // CreateProxy by delegating the call to the ToxiProxy service and try to open the k8s ports before
 func CreateProxy(w http.ResponseWriter, r *http.Request) {
@@ -88,4 +92,13 @@ func serveReverseProxy(url *url.URL, res http.ResponseWriter, req *http.Request)
 
 	// Note that ServeHttp is non blocking and uses a go routine under the hood
 	proxy.ServeHTTP(res, req)
+}
+
+// Healthcheck the microservice
+func Healthcheck(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(200)
+	if err := json.NewEncoder(w).Encode(jsonStatus{Status: "OK", Name: "ResiProxy"}); err != nil {
+		returnError(http.StatusInternalServerError, "Invalid response", w)
+	}
 }
