@@ -14,7 +14,7 @@ func TestNewRouter(t *testing.T) {
 	}{
 		{
 			name:       "OK",
-			wantRoutes: []string{"CreateProxy", "Default"},
+			wantRoutes: []string{"CreateProxy", "Healthcheck", "Default"},
 		},
 	}
 	for _, tt := range tests {

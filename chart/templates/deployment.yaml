@@ -11,15 +11,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
-      annotations:
-        sidecar.istio.io/inject: "true"
       labels:
         app: {{ template "resiproxy.name" . }}
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: resiproxy
-      imagePullSecrets:
-      - name: {{ .Values.image.resiproxy.secret }}
       containers:
         - name: toxiproxy
           image: "{{ .Values.image.toxiproxy.repository }}:{{ .Values.image.toxiproxy.tag }}"
@@ -28,6 +24,12 @@ spec:
             - name: http-{{ .Values.service.toxiproxy.name }}
               protocol: TCP
               containerPort: {{ .Values.service.toxiproxy.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /version
+              port: {{ .Values.service.toxiproxy.internalPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
         - name: {{ .Chart.Name }}
           envFrom:
             - configMapRef:
@@ -38,6 +40,12 @@ spec:
             - name: http-{{ .Values.service.resiproxy.name }}
               protocol: TCP
               containerPort: {{ .Values.service.resiproxy.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: {{ .Values.service.resiproxy.internalPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}

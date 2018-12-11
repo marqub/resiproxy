@@ -133,11 +133,43 @@ func Test_serveReverseProxy(t *testing.T) {
 		name string
 		args args
 	}{
-		// TODO: Add test cases.
+	// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			serveReverseProxy(tt.args.url, tt.args.res, tt.args.req)
+		})
+	}
+}
+
+func TestHealthcheck(t *testing.T) {
+	teardown := setupTestCase(t)
+	defer teardown(t)
+	type args struct {
+		w *httptest.ResponseRecorder
+		r *http.Request
+	}
+	tests := []struct {
+		name string
+		args args
+		want []byte
+	}{
+		{
+			name: "OK",
+			args: args{
+				w: recorder,
+				r: httptest.NewRequest("GET", "/status", nil),
+			},
+			want: []byte("{\"status\":\"OK\",\"name\":\"ResiProxy\"}\n"),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Healthcheck(tt.args.w, tt.args.r)
+			if out := tt.args.w.Body.Bytes(); !reflect.DeepEqual(out, tt.want) {
+				t.Errorf("Healthcheck() = %v, want %v", string(out), string(tt.want))
+			}
 		})
 	}
 }
