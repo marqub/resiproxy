@@ -103,4 +103,4 @@ Session Affinity:         None
 External Traffic Policy:  Cluster
 Events:                   <none>
 ```
-Use the toxiproxy service to redirect your traffic to your dependencies from any services running inside your cluster; for example to send a request to the previous redis service use `resiproxy-toxiproxy.toxy:6379`
+Use the toxiproxy service to redirect your traffic to your dependencies from any services running inside your cluster; for example to send a request to service2 use `resiproxy-toxiproxy.toxy:8081`
