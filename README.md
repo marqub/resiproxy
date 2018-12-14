@@ -69,37 +69,38 @@ configmap-resiproxy  4     0s
 Use the ingress to access ResiProxy from outside the cluster `https://resiproxy.marqub.com`
 A sample request to create a proxy would be
 ```
-curl -X POST \
-  https://resiproxy.marqub.com/proxies \
-  -H 'Cache-Control: no-cache' \
+curl -X POST http://resiproxy.resiliency-testing.com/proxies \  
   -H 'Content-Type: application/json' \
   -d '{
-    "name": "proxy_redis",
-    "listen": "[::]:6379",
-    "upstream": "redis-redis.core:6379",
+    "name": "proxy_service2",
+    "listen": "[::]:8081",
+    "upstream": "service2-go-service.resiliency-testing:8080",
     "enabled": true
 }'
 ```
-This sample request opens the port 6379 at the `toxiproxy` service level to redirect the incoming traffic to the port `6379` of the `redis service` in the namespace `core`: `redis-redis.core:6379`
+This sample request opens the port 8081 at the `toxiproxy` service level to redirect the incoming traffic to the port `8080` of `service2` in the namespace `resiliency-testing`: `service2-go-service.resiliency-testing:8080`
 ```
-$ kubectl describe service resiproxy-toxiproxy -n toxy 
-Name:              resiproxy-toxiproxy
-Namespace:         toxy
-Labels:            app=resiproxy
-                   chart=resiproxy-0.0.1
-                   heritage=Tiller
-                   release=resiproxy
-Annotations:       <none>
-Selector:          app=resiproxy,release=resiproxy
-Type:              ClusterIP
-IP:                xxx.xxx.xxx.xxx
-Port:              http-toxiproxy  8474/TCP
-TargetPort:        8474/TCP
-Endpoints:         xxx.xxx.xxx.xxx:8474
-Port:              6379  6379/TCP
-TargetPort:        6379/TCP
-Endpoints:         xxx.xxx.xxx.xxx:6379
-Session Affinity:  None
-Events:            <none>
+$ kubectl describe service resiproxy-toxiproxy -n resiliency-testing
+Name:                     resiproxy-toxiproxy
+Namespace:                resiliency-testing
+Labels:                   app=resiproxy
+                          chart=resiproxy-0.0.1
+                          heritage=Tiller
+                          release=resiproxy
+Annotations:              <none>
+Selector:                 app=resiproxy,release=resiproxy
+Type:                     NodePort
+IP:                       xxx.xxx.xxx.xxx
+Port:                     http-toxiproxy  8474/TCP
+TargetPort:               8474/TCP
+NodePort:                 http-toxiproxy  31974/TCP
+Endpoints:                xxx.xxx.xxx.xxx:8474
+Port:                     8081  8081/TCP
+TargetPort:               8081/TCP
+NodePort:                 8081  30795/TCP
+Endpoints:                xxx.xxx.xxx.xxx:8081
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
 ```
 Use the toxiproxy service to redirect your traffic to your dependencies from any services running inside your cluster; for example to send a request to the previous redis service use `resiproxy-toxiproxy.toxy:6379`
