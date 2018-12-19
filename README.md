@@ -1,6 +1,8 @@
 [![CircleCI](https://circleci.com/gh/marqub/resiproxy/tree/master.svg?style=svg)](https://circleci.com/gh/marqub/broadcast/tree/master)
 [![codecov](https://codecov.io/gh/marqub/resiproxy/branch/master/graph/badge.svg)](https://codecov.io/gh/solcates/gobwa) 
 # ResiProxy
+### For more info about how to use ResiProxy, have a look at [this story on Medium](http://bit.ly/2EAXRYk)
+
 ### ResiProxy is a [ToxiProxy](https://github.com/Shopify/toxiproxy) k8s companion:
  - intercepts REST proxy creation requests and open all the necessary ports
  - forwards all the requests to toxiproxy (mainly inspired by https://hackernoon.com/writing-a-reverse-proxy-in-just-one-line-with-go-c1edfa78c84b)
